@@ -12,13 +12,14 @@ public class Ticket
     public DateTime? UpdatedAt { get; set; }
     public string PlateNumber { get; set; }
     public int PaidValue { get; set; }
-    private static readonly int Tariff = 790;
+    public PaymentStatus PaymentStatus { get; set; }
+    public static readonly int TARIFF = 790;
 
     public Ticket()
     {
-        CreatedAt = DateTime.UtcNow;
+        PaymentStatus = PaymentStatus.PROCESSING;
     }
-    
+
     public Ticket(string plate) : this()
     {
         PlateNumber = plate;

@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Toll_Payment.Data;
+using Toll_Payment.Middlewares;
+using Toll_Payment.Repositories;
 using Toll_Payment.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +28,8 @@ builder.Services.AddSwaggerGen();
 
 // services
 builder.Services.AddScoped<HealthService>();
+builder.Services.AddScoped<TicketService>();
+builder.Services.AddScoped<TicketRepository>();
 
 var app = builder.Build();
 
@@ -35,6 +39,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Middlewares
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
