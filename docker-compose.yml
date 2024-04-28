@@ -46,6 +46,17 @@ services:
       - DATABASE__USERNAME=postgres
       - DATABASE__PASSWORD=postgres
       - DATABASE__NAME=toll-payment
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - "8081:80"
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: postgres@postgres.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
 
 volumes:
   postgres-volume:
