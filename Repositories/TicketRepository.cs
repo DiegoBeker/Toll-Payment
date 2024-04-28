@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Toll_Payment.Data;
 using Toll_Payment.Models;
 
@@ -18,4 +19,16 @@ public class TicketRepository
         return Ticket;
     }
 
+    public async Task<int> CountMonthTicketsByPlate(string plateNumber)
+    {
+        DateTime todayUtc = DateTime.UtcNow;
+        DateTime startOfMonth = new DateTime(todayUtc.Year, todayUtc.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+        DateTime endOfMonth = startOfMonth.AddMonths(1).AddSeconds(-1);
+
+        int count = await _context.Ticket
+            .Where(t => t.PlateNumber == plateNumber && t.CreatedAt >= startOfMonth && t.CreatedAt <= endOfMonth)
+            .CountAsync<Ticket>();
+
+        return count;
+    }
 }

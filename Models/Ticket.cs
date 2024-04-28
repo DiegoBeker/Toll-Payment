@@ -11,18 +11,20 @@ public class Ticket
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public string PlateNumber { get; set; }
+    public int Value { get; set; }
     public int PaidValue { get; set; }
     public PaymentStatus PaymentStatus { get; set; }
-    public static readonly int TARIFF = 790;
+    public PaymentType PaymentType { get; set; }
 
     public Ticket()
     {
-        PaymentStatus = PaymentStatus.PROCESSING;
+
     }
 
-    public Ticket(string plate) : this()
+    public Ticket(string plate, PaymentType paymentType) : this()
     {
         PlateNumber = plate;
+        PaymentType = paymentType;
     }
 
 }
