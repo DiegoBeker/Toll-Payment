@@ -4,6 +4,7 @@ namespace Toll_Payment.Dtos;
 public class CreateTicketResponseDto
 {
     public string Date { get; set; }
+    public long Id { get; set; }
     public string PlateNumber { get; set; }
     public int Value { get; set; }
     public int PaidValue { get; set; }
@@ -12,6 +13,7 @@ public class CreateTicketResponseDto
 
     public CreateTicketResponseDto(Ticket ticket)
     {
+        Id = ticket.Id;
         Date = DateTime.UtcNow.ToString("dd/MM/yyyy HH:mm:ss");
         PlateNumber = ticket.PlateNumber;
         Value = ticket.Value;

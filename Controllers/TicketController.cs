@@ -9,20 +9,33 @@ namespace Toll_Payment.Controllers;
 [Route("tickets")]
 public class TicketController : ControllerBase
 {
-    private readonly TicketService _ticketservice;
-    public TicketController(TicketService ticketservice)
+    private readonly TicketService _ticketService;
+    public TicketController(TicketService ticketService)
     {
-        _ticketservice = ticketservice;
+        _ticketService = ticketService;
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateTicket([FromBody] CreateTicketDto dto)
     {
-        Ticket ticket = await _ticketservice.CreateTicket(dto);
+        Ticket ticket = await _ticketService.CreateTicket(dto);
         
         CreateTicketResponseDto response = new(ticket);
 
         return CreatedAtAction(null, null, response);
+    }
+
+    [HttpPatch("{status}/{ticketId}")]
+    public async Task<IActionResult> UpdatePaymentStatus(string status, string ticketId)
+    {
+        if (!Enum.TryParse(status, true, out PaymentStatus ticketStatus) || !long.TryParse(ticketId, out long ticketIdParsed))
+        {
+            return BadRequest("Invalid Status");
+        }
+
+        await _ticketService.UpdatePaymentStatus(ticketStatus, ticketIdParsed);
+
+        return NoContent();
     }
 
 }

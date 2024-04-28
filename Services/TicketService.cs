@@ -28,4 +28,10 @@ public class TicketService
         return createdTicket;
     }
 
+    public async Task<Ticket?> UpdatePaymentStatus(PaymentStatus ticketStatus, long ticketIdParsed)
+    {
+        Ticket? ticket = await _ticketRepository.UpdatePaymentStatus(ticketStatus, ticketIdParsed);
+
+        return ticket;
+    }
 }

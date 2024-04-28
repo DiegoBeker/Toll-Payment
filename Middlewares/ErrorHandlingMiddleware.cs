@@ -1,4 +1,5 @@
 using System.Net;
+using Toll_Payment.Exceptions;
 
 namespace Toll_Payment.Middlewares;
 
@@ -27,6 +28,7 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
 
     ExceptionResponse response = exception switch
     {
+      NotFoundException _ => new ExceptionResponse(HttpStatusCode.NotFound, exception.Message),
       _ => new ExceptionResponse(HttpStatusCode.InternalServerError, "Internal server error. Please retry later.")
     };
 

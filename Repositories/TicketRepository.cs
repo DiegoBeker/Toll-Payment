@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Toll_Payment.Data;
+using Toll_Payment.Exceptions;
 using Toll_Payment.Models;
 
 namespace Toll_Payment.Repositories;
@@ -30,5 +31,25 @@ public class TicketRepository
             .CountAsync<Ticket>();
 
         return count;
+    }
+
+    public async Task<Ticket?> UpdatePaymentStatus(PaymentStatus status, long ticketId)
+    {
+
+        var ticket = await _context.Ticket
+            .Where(e => e.Id.Equals(ticketId))
+            .FirstOrDefaultAsync();
+
+        if (ticket != null)
+        {
+            ticket.PaymentStatus = status;
+            await _context.SaveChangesAsync();
+        }
+        else
+        {
+            throw new NotFoundException("Ticket not found.");
+        }
+
+        return ticket;
     }
 }
