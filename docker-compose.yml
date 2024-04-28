@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: me-faz-um-pix
+    ports:
+      - 5433:5432
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  toll-payment:
+    image: toll-payment
+    container_name: toll-payment
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE__HOST=postgres
+      - DATABASE__PORT=5432
+      - DATABASE__USERNAME=postgres
+      - DATABASE__PASSWORD=postgres
+      - DATABASE__NAME=toll-payment
+
+  migrate:
+    image: toll-payment-migrate
+    container_name: toll-migrate
+    build:
+      context: .
+      dockerfile: Dockerfile.migrations
+    environment:
+      - DATABASE__HOST=postgres
+      - DATABASE__PORT=5432
+      - DATABASE__USERNAME=postgres
+      - DATABASE__PASSWORD=postgres
+      - DATABASE__NAME=toll-payment
+
+volumes:
+  postgres-volume:

@@ -4,7 +4,7 @@ using Toll_Payment.Services;
 namespace Toll_Payment.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("health")]
 public class HealthController : ControllerBase
 {
     private readonly HealthService _healthService;
